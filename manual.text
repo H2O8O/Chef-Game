@@ -1,0 +1,26 @@
+Manual de Juego – Mates Chef:
+
+Proyecto escolar de programación, desarrollado en equipo
+por estudiantes del nivel secundario.
+
+Controles
+Ratón:
+  – Mueve al Chef en los ejes de la pantalla
+  – Permite pausar y acceder a los menús
+
+Teclado (modo accesible):
+  – Flechas direccionales (↑ ↓ ← →) o W A S D para mover al chef sin ratón.
+  – Esc para pausar.
+
+Cómo se juega:
+  – Atrapa las bolitas verdes con los ingredientes correctos,
+    en el orden que pide cada paso de la receta.
+  – Evita las bolitas rojas: te quitan una vida (tienes 3).
+  – Completa los pasos (Igualamos, Sustituimos, Resolvemos,
+    Verificamos) antes de que se acabe el tiempo.
+
+Historia:
+Acompaña a un padre chef que, con la ayuda de sus dos hijos,
+debe preparar el plato perfecto para su profesor.
+Cada ingrediente es un problema de álgebra: resuélvelo a tiempo
+y conquista el paladar del profesor.

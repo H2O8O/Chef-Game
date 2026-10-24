@@ -1,0 +1,26 @@
+[
+  {
+    "name": "backgroundmusic",
+    "path": "assets/Audio/BackgroundMusic.mp3",
+    "volume": 0.45,
+    "type": "background"
+  },
+  {
+    "name": "correctsound",
+    "path": "assets/Audio/CorrectSound.mp3",
+    "volume": 0.3,
+    "type": "effect"
+  },
+  {
+    "name": "incorrectsound",
+    "path": "assets/Audio/IncorrectSound.mp3",
+    "volume": 0.3,
+    "type": "effect"
+  },
+  {
+    "name": "selecmenusound",
+    "path": "assets/Audio/SelectMenuSound.mp3",
+    "volume": 0.25,
+    "type": "ui"
+  }
+]

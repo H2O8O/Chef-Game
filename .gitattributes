@@ -1,0 +1,5 @@
+# Normalizar finales de línea entre sistemas operativos
+* text=auto
+*.png binary
+*.mp3 binary
+*.mp4 binary

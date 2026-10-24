@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mates Chef</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍🍳</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/audio-animations.css">
+    <link rel="stylesheet" href="css/audio-controls.css">
+    <link rel="stylesheet" href="css/audio-visualizers.css">
+    <link rel="stylesheet" href="css/game-menus.css">
+    <link rel="stylesheet" href="css/menu-animations.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Pantalla de Inicio (para activar audio) -->
+        <div id="start-screen" class="screen active" style="background:#000;">
+            <div class="menu-content" style="text-align:center;">
+                <h1>👨‍🍳 Mates Chef</h1>
+                <p style="margin:20px 0;">Presiona para comenzar</p>
+                <button id="start-btn" class="btn-primary" style="font-size:1.5em; padding:20px 50px;">▶️ Iniciar</button>
+            </div>
+        </div>
+
+        <div id="main-menu" class="screen">
+            <div class="animated-bg">
+                <div class="floating-chef" style="animation-delay:0s;">👨‍🍳</div>
+                <div class="floating-chef" style="animation-delay:5s;">👩‍🍳</div>
+                <div class="floating-number" style="animation-delay:2s;">x</div>
+                <div class="floating-number" style="animation-delay:4s;">y</div>
+                <div class="floating-number" style="animation-delay:6s;">=</div>
+                <div class="floating-ball green" style="animation-delay:1s;"></div>
+                <div class="floating-ball green" style="animation-delay:3s;"></div>
+                <div class="floating-ball red" style="animation-delay:7s;"></div>
+            </div>
+            <div class="menu-content">
+                <h1>👨‍🍳 Mates Chef</h1>
+                <div class="menu-buttons"></div>
+            </div>
+        </div>
+
+        <div id="level-select" class="screen">
+            <div class="menu-content" style="max-width:1000px;">
+                <h2 style="font-size:2.5em;margin-bottom:20px;">Selecciona tu Desafío</h2>
+                <div class="difficulty-selector">
+                    <button class="btn-diff active" data-diff="easy">Fácil</button>
+                    <button class="btn-diff" data-diff="medium">Medio</button>
+                    <button class="btn-diff" data-diff="hard">Difícil</button>
+                </div>
+                <div id="levels-container"></div>
+                <button class="btn-secondary" id="back-to-menu">Volver</button>
+            </div>
+        </div>
+
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+                <div class="stat-box"><div id="current-level">Nivel 1</div></div>
+                <div class="stat-box"><div id="lives-display"></div></div>
+                <div class="stat-box">
+                    <div class="timer-bar"><div id="timer-fill"></div></div>
+                    <span id="timer-text">3:00</span>
+                </div>
+                <button class="btn-secondary" id="pause-btn" style="padding:8px 16px;font-size:0.9em;">⏸️</button>
+            </div>
+
+            <div class="equation-display">
+                <div id="system-equations"></div>
+                <div id="step-history"></div>
+                <div id="current-step-label"></div>
+                <div id="step-validation" class="step-validation-container"></div>
+                <div id="current-work"></div>
+            </div>
+
+            <canvas id="game-canvas"></canvas>
+            
+            <div id="tutorial-overlay" class="tutorial-overlay">
+                <div class="tutorial-box">
+                    <h3 id="tutorial-title">🎮 Tutorial</h3>
+                    <p id="tutorial-text"></p>
+                    <div id="tutorial-visual"></div>
+                    <button id="tutorial-next" class="btn-primary">Siguiente</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="story-screen" class="screen">
+            <div class="story-container">
+                <div id="story-emoji" class="story-emoji"></div>
+                <div id="story-text" class="story-text"></div>
+                <button id="story-next" class="btn-primary story-btn">Continuar</button>
+            </div>
+        </div>
+
+        <div id="pause-screen" class="screen">
+            <div class="menu-content">
+                <h2>⏸️ Pausa</h2>
+                <div class="stat-box" style="margin:20px 0;flex-direction:column;gap:5px;">
+                    <span style="font-size:0.9em;opacity:0.7;">Paso Actual:</span>
+                    <span id="pause-step-info" style="color:var(--accent);"></span>
+                </div>
+                <div class="menu-buttons">
+                    <button class="btn-primary" id="resume-btn">Continuar</button>
+                    <button class="btn-secondary" id="restart-btn">Reiniciar</button>
+                    <button class="btn-secondary" id="settings-from-pause-btn">Config</button>
+                    <button class="btn-secondary" id="menu-from-pause-btn">Menú</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="settings-screen" class="screen">
+            <div class="menu-content">
+                <h2>⚙️ Configuración</h2>
+                <div class="settings-panel">
+                    <div class="audio-controls">
+                        <div class="audio-controls__group">
+                            <label class="audio-controls__label">🎵 Música <span id="music-value" class="volume-value">50%</span></label>
+                            <input type="range" id="music-vol" class="audio-controls__slider" min="0" max="1" step="0.1" value="0.5">
+                        </div>
+                        <div class="audio-controls__group">
+                            <label class="audio-controls__label">🔊 Efectos <span id="sfx-value" class="volume-value">70%</span></label>
+                            <input type="range" id="sfx-vol" class="audio-controls__slider" min="0" max="1" step="0.1" value="0.7">
+                        </div>
+                        <div class="audio-controls__group">
+                            <label class="audio-controls__label">🎙️ Otros <span id="other-value" class="volume-value">50%</span></label>
+                            <input type="range" id="other-vol" class="audio-controls__slider" min="0" max="1" step="0.1" value="0.5">
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-secondary" id="close-settings-btn" style="width:100%;margin-top:20px;">Cerrar</button>
+            </div>
+        </div>
+
+        <div id="gameover-screen" class="screen">
+            <div class="gameover-container">
+                <div style="font-size:6em;margin-bottom:20px;">🔥</div>
+                <h2>¡Se Quemó!</h2>
+                <p id="gameover-message" style="margin:20px 0;font-size:1.2em;opacity:0.9;"></p>
+                <div class="menu-buttons">
+                    <button class="btn-primary" id="retry-btn">Reintentar</button>
+                    <button class="btn-secondary" id="menu-from-gameover-btn">Menú</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="victory-screen" class="screen">
+            <div class="victory-container">
+                <h2>🎉 ¡Delicioso!</h2>
+                <div id="stars-display" style="font-size:3em;margin:20px 0;"></div>
+                <div id="victory-message" style="margin-bottom:30px;"></div>
+                <div class="menu-buttons">
+                    <button class="btn-primary" id="next-level-btn">Siguiente</button>
+                    <button class="btn-secondary" id="menu-from-victory-btn">Menú</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="video-screen" class="screen" style="background:#000;">
+            <div id="ending-card" style="position:absolute;top:0;left:0;right:0;bottom:40px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 60px;">
+                <h2 id="ending-title" style="font-size:3em;font-weight:bold;letter-spacing:1px;margin-bottom:24px;color:#43d477;">Good Ending</h2>
+                <p id="ending-line1" style="font-size:1.8em;font-weight:bold;color:#fff;margin-bottom:18px;">Preparaste una muy buena comida</p>
+                <p style="font-size:1.25em;color:#e8e8e8;line-height:1.5;">👨‍🏫 la probó y tus hijos sacaron <span id="ending-score">9/10</span> en el examen (para nada tuvo que ver con la comida guillo guillo)</p>
+                <div id="ending-icon" style="font-size:4.5em;margin-top:26px;">🎉</div>
+            </div>
+            <div id="video-controls" style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:15px;z-index:10;">
+                <button id="video-skip-btn" class="btn-secondary" style="padding:10px 30px;">▶️ Continuar</button>
+            </div>
+        </div>
+
+        <div id="credits-screen" class="screen">
+            <div class="menu-content" style="text-align:left;">
+                <h2 style="text-align:center;margin-bottom:30px;color:var(--accent);">👥 Créditos</h2>
+                <div style="line-height:1.6;">
+                    <p><strong>Equipo de desarrollo</strong> — Estudiantes del nivel secundario</p>
+                    <p><strong>Roles del equipo</strong> — Desarrollo principal · Narrativa y assets · QA y testing</p>
+                    <hr style="margin:15px 0;border:none;border-top:1px solid var(--glass-heavy);">
+                    <p style="text-align:center;font-weight:bold;color:var(--accent);">Proyecto escolar de programación</p>
+                    <p style="text-align:center;font-size:0.9em;opacity:0.8;margin-top:10px;">Con la orientación del profesor de la asignatura</p>
+                    <p style="text-align:center;font-size:0.8em;opacity:0.6;margin-top:12px;">Versión 1.0</p>
+                </div>
+                <button class="btn-secondary" id="credits-to-menu-btn" style="width:100%;margin-top:30px;">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/levels.js"></script>
+    <script src="js/SoundManager.js"></script>
+    <script src="js/ExpressionProgress.js"></script>
+    <script src="js/FallingObject.js"></script>
+    <script src="js/GameRenderer.js"></script>
+    <script src="js/UIManager.js"></script>
+    <script src="js/TutorialManager.js"></script>
+    <script src="js/AlgebraChef_GameLogic.js"></script>
+    <script src="js/AlgebraChef.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
